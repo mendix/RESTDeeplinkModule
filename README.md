@@ -1,6 +1,6 @@
 # REST Deeplink Module
 
-This document is intended to help you set up the DeeplinkAPI module for your own Mendix app.
+This document is intended to help you set up the DeeplinkAPI Published REST service document included in this module for your own Mendix app.
 
 ## What is a deep link?
 
