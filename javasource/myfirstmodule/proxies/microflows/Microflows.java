@@ -17,15 +17,8 @@ public class Microflows
 	// These are the microflows for the MyFirstModule module
 	public static myfirstmodule.proxies.StringHolder getUserName(IContext context)
 	{
-		try
-		{
-			Map<java.lang.String, Object> params = new HashMap<java.lang.String, Object>();
-			IMendixObject result = (IMendixObject)Core.execute(context, "MyFirstModule.GetUserName", params);
-			return result == null ? null : myfirstmodule.proxies.StringHolder.initialize(context, result);
-		}
-		catch (CoreException e)
-		{
-			throw new MendixRuntimeException(e);
-		}
+		Map<java.lang.String, Object> params = new HashMap<>();
+		IMendixObject result = (IMendixObject)Core.microflowCall("MyFirstModule.GetUserName").withParams(params).execute(context);
+		return result == null ? null : myfirstmodule.proxies.StringHolder.initialize(context, result);
 	}
 }

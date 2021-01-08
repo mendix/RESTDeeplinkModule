@@ -22,28 +22,27 @@
         showMessage("");
     };
 
-	var paramFilter = function(param, filter) {
-		var result = param.split("=")[0] === filter;
-		console.log("key: " + param.split("=")[0] + " filter: " + filter);
-		return result;
-	}
-	
+    var paramFilter = function(param, filter) {
+        var result = param.split("=")[0] === filter;
+        return result;
+    }
+    
     var removeMessageCode = function(search) {
         var searchParams = search.substring(1).split("&").filter(param => !paramFilter(param, "messageCode"));
 
         return searchParams.length > 0 ? "?" + searchParams.join("&") : "";
     }
 
-	var continuationValue = function(search) {
-		var continuationParam = search.substring(1).split("&").filter(param => paramFilter(param, "continuation"));
-	
-		if (continuationParam && continuationParam.length > 0) {
-			console.log("continuationParam: " + continuationParam[0]);
-			var continuationUrl = continuationParam[0].split("=")[1];
-			return continuationUrl;
-		}
-		return "";
-	}
+    var continuationValue = function(search) {
+        var continuationParam = search.substring(1).split("&").filter(param => paramFilter(param, "continuation"));
+    
+        if (continuationParam && continuationParam.length > 0) {
+            //console.log("continuationParam: " + continuationParam[0]);
+            var continuationUrl = continuationParam[0].split("=")[1];
+            return continuationUrl;
+        }
+        return "";
+    }
 
     var submit = function() {
         loginButton.setAttribute("disabled", "disabled");
@@ -67,15 +66,15 @@
 
             switch (xhr.status) {
                 case 200:
-					let continuationUrl = new URL(decodeURIComponent(continuationValue(window.location.search)));
-					
-					if (continuationUrl.href.length > 0) {
-						window.location.href = window.location.origin 
-							+ decodeURIComponent(continuationUrl.pathname + continuationUrl.search + continuationUrl.hash);
-					} else {
-						var url = /login\.html/.test(window.location.pathname) ? "index.html" : "index3.html";
-						window.location = url + removeMessageCode(window.location.search) + window.location.hash;
-					}
+                    let continuationUrl = new URL(decodeURIComponent(continuationValue(window.location.search)));
+                    
+                    if (continuationUrl.href.length > 0) {
+                        window.location.href = window.location.origin 
+                            + decodeURIComponent(continuationUrl.pathname + continuationUrl.search + continuationUrl.hash);
+                    } else {
+                        var url = /login\.html/.test(window.location.pathname) ? "index.html" : "index3.html";
+                        window.location = url + removeMessageCode(window.location.search) + window.location.hash;
+                    }
                     return; 
                 case 400:
                 case 401:
@@ -161,5 +160,14 @@
         }
     }
 
-    document.cookie = "originURI=" + location.pathname + ";max-age=" + (60 * 60 * 24 * 365);
+    var cookieParts = [
+        "originURI=" + location.pathname,
+        "max-age=" + (60 * 60 * 24 * 365),
+    ];
+
+    if (window.location.protocol === "https:") {
+        cookieParts.push("SameSite=None", "Secure");
+    }
+
+    document.cookie = cookieParts.join(";");
 })();
