@@ -44,6 +44,9 @@ In combination with the [MendixSSO module](https://appstore.home.mendix.com/link
 
 In case a page is not found the module will return a 404 status. If desired you can edit the HTML output in `resources/404.html`.
 
+### Known issue
+When a user of your app bookmarks the URL of a target page, such as `myapp.com/p/order/12345`, the next time she visits that bookmark she will be redirected to the homepage instead in case her session is expired and she has to login again via SSO. This is currently a limitation of the platform.
+
 ## Running the example
 
 The module constains an example deeplink flow for testing purposes. All the related documents are stored in the `ExampleSetup` folder. To set up the example flow the `ASU_ensureData` microflow has to be added to your [after startup microflow](https://docs.mendix.com/refguide/project-settings#3-3-after-startup). 
